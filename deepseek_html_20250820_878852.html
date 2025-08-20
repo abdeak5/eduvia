@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إيدوفيا - المساعد الذكي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #000000;
+            --secondary-color: #ffffff;
+            --accent-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --dark-gray: #495057;
+            --text-color: #212529;
+            --light-gray: #dee2e6;
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        body {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* الشريط العلوي */
+        header {
+            padding: 15px 0;
+            border-bottom: 1px solid var(--light-gray);
+            position: sticky;
+            top: 0;
+            background-color: var(--secondary-color);
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 800;
+            font-size: 24px;
+            text-decoration: none;
+            color: var(--primary-color);
+        }
+        
+        .logo i {
+            margin-left: 10px;
+            font-size: 28px;
+            color: var(--primary-color);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin: 0 12px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 500;
+            transition: var(--transition);
+            font-size: 16px;
+            position: relative;
+            padding: 5px 0;
+        }
+        
+        nav ul li a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            right: 0;
+            background-color: var(--primary-color);
+            transition: var(--transition);
+        }
+        
+        nav ul li a:hover:after {
+            width: 100%;
+        }
+        
+        nav ul li a.active {
+            font-weight: 700;
+        }
+        
+        nav ul li a.active:after {
+            width: 100%;
+        }
+        
+        .cta-button {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            border: none;
+            padding: 10px 22px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 15px;
+        }
+        
+        .cta-button:hover {
+            background-color: #333;
+            transform: translateY(-2px);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+        
+        /* محتوى الصفحات */
+        .page-content {
+            padding: 40px 0;
+            min-height: 65vh;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            font-weight: 800;
+            position: relative;
+            padding-bottom: 15px;
+            text-align: center;
+        }
+        
+        .page-title:after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary-color);
+            bottom: 0;
+            right: 50%;
+            transform: translateX(50%);
+        }
+        
+        .page-description {
+            font-size: 1.2rem;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 50px;
+            color: var(--dark-gray);
+            line-height: 1.8;
+        }
+        
+        /* واجهة المساعد الذكي المحسنة */
+        .chat-container {
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.07);
+            overflow: hidden;
+            max-width: 900px;
+            margin: 0 auto;
+            border: 1px solid var(--light-gray);
+        }
+        
+        .chat-header {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            padding: 20px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: var(--accent-gray);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            max-width: 80%;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .message.bot {
+            align-self: flex-start;
+        }
+        
+        .message.user {
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        
+        .message-content {
+            padding: 12px 18px;
+            border-radius: 18px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            line-height: 1.5;
+        }
+        
+        .message.bot .message-content {
+            background-color: var(--secondary-color);
+            border: 1px solid var(--light-gray);
+            border-top-right-radius: 4px;
+            color: var(--text-color);
+        }
+        
+        .message.user .message-content {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            border-top-left-radius: 4px;
+        }
+        
+        .message-typing {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: var(--secondary-color);
+            border: 1px solid var(--light-gray);
+            border-radius: 18px;
+            width: fit-content;
+            margin-top: 10px;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--dark-gray);
+            border-radius: 50%;
+            margin: 0 3px;
+            animation: typingAnimation 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typingAnimation {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+        
+        .chat-input-container {
+            padding: 15px;
+            border-top: 1px solid var(--light-gray);
+            background-color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: 4px;
+            font-size: 16px;
+            resize: none;
+            height: 50px;
+            transition: var(--transition);
+        }
+        
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chat-send-btn {
+            margin-right: 10px;
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        
+        .chat-send-btn:hover {
+            background-color: #333;
+        }
+        
+        .chat-send-btn:disabled {
+            background-color: var(--medium-gray);
+            cursor: not-allowed;
+        }
+        
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 15px;
+            border-top: 1px solid var(--light-gray);
+            background-color: var(--accent-gray);
+        }
+        
+        .suggestion-btn {
+            padding: 8px 15px;
+            background-color: var(--secondary-color);
+            border: 1px solid var(--light-gray);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 14px;
+            color: var(--text-color);
+        }
+        
+        .suggestion-btn:hover {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+        }
+        
+        /* التجاوب مع الشاشات المختلفة */
+        @media (max-width: 992px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            nav {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                width: 80%;
+                height: calc(100vh - 70px);
+                background-color: var(--secondary-color);
+                transition: var(--transition);
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+                z-index: 999;
+                padding: 30px;
+            }
+            
+            nav.active {
+                right: 0;
+            }
+            
+            nav ul {
+                flex-direction: column;
+            }
+            
+            nav ul li {
+                margin: 15px 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .page-description {
+                font-size: 1.1rem;
+            }
+            
+            .message {
+                max-width: 90%;
+            }
+            
+            .chat-messages {
+                height: 350px;
+                padding: 15px;
+            }
+            
+            .suggestions {
+                padding: 10px;
+            }
+            
+            .suggestion-btn {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+        }
+        
+        /* تأثيرات التمرير */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* إخفاء الصفحات غير النشطة */
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- الشريط العلوي -->
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo" onclick="showPage('home')">
+                <i class="fas fa-brain"></i>
+                <span>Edovia</span>
+            </a>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav>
+                <ul>
+                    <li><a href="#" class="nav-link" onclick="showPage('home')">الرئيسية</a></li>
+                    <li><a href="#" class="nav-link active" onclick="showPage('assistant')">المساعد الذكي</a></li>
+                    <li><a href="#" class="nav-link" onclick="showPage('academic')">المحرك الأكاديمي</a></li>
+                    <li><a href="#" class="nav-link" onclick="showPage('about')">من نحن</a></li>
+                    <li><a href="#" class="nav-link" onclick="showPage('contact')">تواصل معنا</a></li>
+                </ul>
+            </nav>
+            <button class="cta-button" onclick="showPage('academic')">المحرك الأكاديمي</button>
+        </div>
+    </header>
+
+    <!-- صفحة المساعد الذكي -->
+    <div id="assistant" class="page active">
+        <div class="container page-content">
+            <h1 class="page-title">المساعد الذكي</h1>
+            <p class="page-description">استخدم مساعدنا الذكي المدعوم بالذكاء الاصطناعي للإجابة على أسئلتك، تنظيم أفكارك البحثية، وتبسيط المفاهيم العلمية.</p>
+            
+            <div class="chat-container">
+                <div class="chat-header">
+                    <i class="fas fa-robot"></i>
+                    <span>مساعد إيدوفيا الذكي - مدعوم بـ Google AI</span>
+                </div>
+                
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message bot">
+                        <div class="message-content">
+                            مرحبًا! أنا مساعد إيدوفيا الذكي. كيف يمكنني مساعدتك اليوم في مجال البحث العلمي والتعليم؟
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="suggestions">
+                    <button class="suggestion-btn" onclick="sendSuggestion('كيف يمكنني كتابة خطة بحثية؟')">
+                        <i class="fas fa-lightbulb"></i> كيف يمكنني كتابة خطة بحثية؟
+                    </button>
+                    <button class="suggestion-btn" onclick="sendSuggestion('ما هي أحدث الأبحاث في الذكاء الاصطناعي؟')">
+                        <i class="fas fa-lightbulb"></i> أحدث الأبحاث في الذكاء الاصطناعي
+                    </button>
+                    <button class="suggestion-btn" onclick="sendSuggestion('كيف أنظم وقت الدراسة بشكل فعال؟')">
+                        <i class="fas fa-lightbulb"></i> تنظيم وقت الدراسة
+                    </button>
+                    <button class="suggestion-btn" onclick="sendSuggestion('ما هي مناهج البحث العلمي؟')">
+                        <i class="fas fa-lightbulb"></i> مناهج البحث العلمي
+                    </button>
+                </div>
+                
+                <div class="chat-input-container">
+                    <textarea class="chat-input" id="userInput" placeholder="اكتب رسالتك هنا..." rows="1"></textarea>
+                    <button class="chat-send-btn" id="sendButton" onclick="sendMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px; color: var(--dark-gray);">
+                <p>يدعم المساعد الذكي مواضيع البحث العلمي، صياغة الأفكار، المساعدة في الكتابة الأكاديمية، والإجابة على الاستفسارات التعليمية.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // كود جافاسكريبت للتنقل بين الصفحات
+        function showPage(pageId) {
+            // إخفاء جميع الصفحات
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // إظهار الصفحة المطلوبة
+            document.getElementById(pageId).classList.add('active');
+            
+            // تحديث حالة الروابط في القائمة
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // إضافة النشاط للرابط المناسب
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.getAttribute('onclick').includes(pageId)) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // إغلاق القائمة المتنقلة إذا كانت مفتوحة
+            if (document.querySelector('nav').classList.contains('active')) {
+                document.querySelector('nav').classList.remove('active');
+                document.querySelector('.mobile-menu-btn').innerHTML = '<i class="fas fa-bars"></i>';
+            }
+            
+            // التمرير إلى الأعلى
+            window.scrollTo(0, 0);
+        }
+        
+        // زر القائمة المتنقلة
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const nav = document.querySelector('nav');
+        
+        mobileMenuBtn.addEventListener('click', function() {
+            nav.classList.toggle('active');
+            this.innerHTML = nav.classList.contains('active') ? 
+                '<i class="fas fa-times"></i>' : '<i class="fas fa-bars'></i>';
+        });
+        
+        // تأثيرات الظهور عند التمرير
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        function checkFade() {
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+        
+        window.addEventListener('load', checkFade);
+        window.addEventListener('scroll', checkFade);
+        
+        // تكوين المساعد الذكي مع Google AI API
+        const API_KEY = 'AIzaSyD-HsOHiAWxifDvf1cxGgUvJjuwdh5FzFg';
+        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+        
+        // عناصر واجهة المستخدم
+        const chatMessages = document.getElementById('chatMessages');
+        const userInput = document.getElementById('userInput');
+        const sendButton = document.getElementById('sendButton');
+        
+        // إعداد نص الإدخال للتكيف مع المحتوى
+        userInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+            
+            if (this.scrollHeight > 150) {
+                this.style.overflowY = 'scroll';
+            } else {
+                this.style.overflowY = 'hidden';
+            }
+        });
+        
+        // السماح بإرسال الرسالة بالضغط على Enter (بدون Shift)
+        userInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+        
+        // إرسال رسالة اقتراح تلقائي
+        function sendSuggestion(suggestion) {
+            userInput.value = suggestion;
+            sendMessage();
+        }
+        
+        // إرسال رسالة إلى المساعد الذكي
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+            
+            // إضافة رسالة المستخدم إلى الدردشة
+            addMessage(message, 'user');
+            userInput.value = '';
+            userInput.style.height = '50px';
+            
+            // تعطيل زر الإرسال أثناء المعالجة
+            sendButton.disabled = true;
+            sendButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            
+            // إظهار مؤشر الكتابة
+            showTypingIndicator();
+            
+            try {
+                // إرسال الطلب إلى Google AI API
+                const response = await fetch(`${API_URL}?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: `أنت مساعد أكاديمي متخصص في مساعدة الباحثين والطلاب. 
+                                أجِب على الاستفسار التالي بطريقة مفيدة وواضحة مع التركيز على الجوانب الأكاديمية والبحثية.
+                                يجب أن تكون الإجابة باللغة العربية الفصحى.
+                                السؤال: ${message}`
+                            }]
+                        }]
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('فشل في الحصول على response من الخادم');
+                }
+                
+                const data = await response.json();
+                
+                // إخفاء مؤشر الكتابة
+                hideTypingIndicator();
+                
+                // استخراج النص من الresponse
+                const responseText = data.candidates[0].content.parts[0].text;
+                
+                // إضافة response المساعد إلى الدردشة
+                addMessage(responseText, 'bot');
+                
+            } catch (error) {
+                // إخفاء مؤشر الكتابة
+                hideTypingIndicator();
+                
+                // إظهار رسالة خطأ
+                addMessage('عذرًا، حدث خطأ في الاتصال بالمساعد الذكي. يرجى المحاولة مرة أخرى لاحقًا.', 'bot');
+                console.error('Error:', error);
+            } finally {
+                // إعادة تمكين زر الإرسال
+                sendButton.disabled = false;
+                sendButton.innerHTML = '<i class="fas fa-paper-plane"></i>';
+            }
+        }
+        
+        // إضافة رسالة إلى الدردشة
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            
+            // معالجة النص لتحسين العرض
+            const processedText = text.replace(/\n/g, '<br>');
+            messageContent.innerHTML = processedText;
+            
+            messageDiv.appendChild(messageContent);
+            chatMessages.appendChild(messageDiv);
+            
+            // التمرير إلى أحدث رسالة
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // إظهار مؤشر الكتابة
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot';
+            typingDiv.id = 'typing-indicator';
+            
+            const typingContent = document.createElement('div');
+            typingContent.className = 'message-typing';
+            
+            for (let i = 0; i < 3; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'typing-dot';
+                typingContent.appendChild(dot);
+            }
+            
+            typingDiv.appendChild(typingContent);
+            chatMessages.appendChild(typingDiv);
+            
+            // التمرير إلى أحدث رسالة
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // إخفاء مؤشر الكتابة
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+        
+        // تهيئة تأثيرات الظهور عند التحميل
+        window.addEventListener('load', function() {
+            checkFade();
+        });
+    </script>
+</body>
+</html>
